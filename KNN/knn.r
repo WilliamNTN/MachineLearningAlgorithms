@@ -2,12 +2,7 @@
 #Simple KNN by William A. da Rosa
 
 euclidean_distance = function(p1,p2){
-  d = length(p1)
-  dist = 0
-  for(i in 1:d){
-    dist = dist + (p1[i]-p2[i])^2
-  }
-  return (sqrt(dist))
+  return(sqrt(sum((p1-p2)^2)))
 }
 
 knn = function(dataset,x,distance_function = euclidean_distance,k=1){
