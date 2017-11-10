@@ -49,7 +49,7 @@ mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate =
     for(i in 1:nrow(dataset)){
       X = as.numeric(dataset[i,1:model$input_size])
       Y = as.numeric(dataset[i,(model$input_size+1):ncol(dataset)])
-      
+
       result = mlp.forward(X,model)
       Out = result$f_output_net
     
@@ -75,5 +75,7 @@ mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate =
     cat("SquaredError = ",sError,"\n")
     iters = iters+1
   }
+  
+  return (model)
 }
 
