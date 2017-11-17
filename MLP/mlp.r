@@ -40,7 +40,16 @@ mlp.forward = function(x,model){
     return(model)
 }
 
-mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate = 0.1,max_iters = 500){
+mlp.classify = function(data,model){
+  res = numeric(nrow(data))
+  for(i in 1:nrow(data)){
+    x = data[i,]
+    res[i] = mlp.forward(x,model)$f_output_net
+  }
+  
+  return(res)
+}
+mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate = 0.1,max_iters = 500,verbose=T){
   sError = 2*threshold;
   iters = 0
   while( (sError > threshold) && iters < max_iters){
@@ -55,9 +64,6 @@ mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate =
     
       error = Y - Out
       sError = sError + sum(error^2)
-      
-      
-      
 
       delta_output = error * model$activation_function_derivate(result$f_output_net)
      
@@ -72,7 +78,8 @@ mlp.backpropagation = function(dataset, model, threshold = 1e-3, learning_rate =
         
     }
     sError = sError / nrow(dataset)
-    cat("SquaredError = ",sError,"\n")
+    if(verbose)
+      cat("SquaredError = ",sError,"\n")
     iters = iters+1
   }
   

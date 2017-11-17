@@ -12,8 +12,9 @@ knn = function(dataset,x,distance_function = euclidean_distance,k=1){
           as.numeric (row [1:(class_id-1)]),
           as.numeric (x   [1:(class_id-1)]))
   })
+  
   nn_ids =  sort.list(distances,dec=F)[1:k]
-  nn_classes = data[nn_ids,class_id]
+  nn_classes = dataset[nn_ids,class_id]
   
   classes = unique(nn_classes)
   occurs = NULL
@@ -34,13 +35,21 @@ knn = function(dataset,x,distance_function = euclidean_distance,k=1){
 knn.accuracy = function(examples_dataset,train_dataset,distance_function = euclidean_distance,k=1){
   y = train_dataset[,ncol(train_dataset)]
 
-  predict_y = NULL
-  for(i in 1:nrow(train_dataset)){
-    predict_y[i] = knn(examples_dataset,train_dataset[i,],distance_function,k)$y
-  }
+ predict_y = knn.classify(examples_dataset,train_dataset,distance_function,k)
   
   correct = length(which(y == predict_y))
   acc = correct / nrow(train_dataset)
   
   return (acc)
+}
+
+knn.classify = function(examples_dataset,train_dataset,distance_function = euclidean_distance,k=1){
+  y = train_dataset[,ncol(train_dataset)]
+  
+  out = numeric(nrow(train_dataset));
+  for(i in 1:nrow(train_dataset)){
+    out[i] = knn(examples_dataset,train_dataset[i,],distance_function,k)$y;
+  }
+  
+  return (out)
 }
